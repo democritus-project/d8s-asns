@@ -2,12 +2,11 @@
 """Helpful functions for working with ASNs."""
 
 import os
+import re
 import sys
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, List, Dict, Optional
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
-import decorators
-from typings import ListOfInts, ListOfStrs, ListOfDictsStrKeyStrVal, StrOrNone
+from .asns_temp_utils import standardize_asn, stringify_first_arg
 
 
 def _cidr_report_org_asn_format(as_number: str) -> str:
@@ -15,7 +14,7 @@ def _cidr_report_org_asn_format(as_number: str) -> str:
     return as_number.replace('N', '')
 
 
-@decorators.standardize_asn
+@standardize_asn
 def asn_announced_prefixes(as_number: str) -> Iterable[str]:
     """."""
     from networking import get
@@ -33,7 +32,7 @@ def asn_announced_prefixes(as_number: str) -> Iterable[str]:
         yield prefix['_value']
 
 
-@decorators.standardize_asn
+@standardize_asn
 def asn_adjacent_asns(as_number: str) -> Iterable[str]:
     """."""
     from networking import get
@@ -51,7 +50,7 @@ def asn_adjacent_asns(as_number: str) -> Iterable[str]:
         yield link['_value']
 
 
-@decorators.standardize_asn
+@standardize_asn
 def asn_whois(as_number: str) -> str:
     from websites import website_get_section_containing
 
@@ -89,7 +88,7 @@ def asns() -> Iterable[Tuple[str, str]]:
         yield asn, asn_name
 
 
-@decorators.standardize_asn
+@standardize_asn
 def asn_number(as_number: str) -> int:
     """Get the number value of the given ASN."""
     return int(as_number.lstrip('ASN'))
@@ -115,7 +114,7 @@ def asns_private_numbers() -> Iterable[int]:
             yield int(private_asn_numbers)
 
 
-def asns_private_ranges() -> ListOfDictsStrKeyStrVal:
+def asns_private_ranges() -> List[Dict[str, str]]:
     """Get the reserved (private) ASN ranges from https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml."""
     from csv_data import csv_to_json
 
@@ -126,8 +125,8 @@ def asns_private_ranges() -> ListOfDictsStrKeyStrVal:
     return private_asns
 
 
-@decorators.standardize_asn
-def asn_name(as_number: str) -> StrOrNone:
+@standardize_asn
+def asn_name(as_number: str) -> Optional[str]:
     """Get the name of the given asn."""
     all_asns = asns()
     for asn, name in all_asns:
@@ -135,13 +134,10 @@ def asn_name(as_number: str) -> StrOrNone:
             return name
 
 
-@decorators.map_first_arg
-@decorators.stringify_first_arg
-def asn_standardize(as_number: str) -> StrOrNone:
+@stringify_first_arg
+def asn_standardize(as_number: str) -> Optional[str]:
     """Standardize the ASN format."""
-    from regexes import find
-
-    numbers = find('[0-9]{1,10}', as_number)
+    numbers = re.findall('[0-9]{1,10}', as_number)
     if numbers:
         return 'ASN{}'.format(numbers[0])
     else:
