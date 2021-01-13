@@ -72,7 +72,6 @@ def test_asn_standardize_docs_1():
     assert asn_standardize('AS 1234') == 'ASN1234'
     assert asn_standardize('ASN1234') == 'ASN1234'
     assert asn_standardize('ASN 1234') == 'ASN1234'
-    assert asn_standardize(['ASN 1234', 'AS4321', 'ASN1234']) == ['ASN1234', 'ASN4321', 'ASN1234']
     assert asn_standardize('1234') == 'ASN1234'
     assert asn_standardize(1234) == 'ASN1234'
     assert asn_standardize('foo') == None
