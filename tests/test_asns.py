@@ -79,7 +79,7 @@ def test_asn_standardize_docs_1():
 
 
 def test_asns_private_ranges_docs_1():
-    assert asns_private_ranges() == [
+    assert tuple(asns_private_ranges()) == (
         {'AS Number': '0', 'Reason for Reservation': 'Reserved by [RFC7607]', 'Reference': '[RFC7607]'},
         {
             'AS Number': '112',
@@ -109,7 +109,7 @@ def test_asns_private_ranges_docs_1():
             'Reference': '[RFC6996]',
         },
         {'AS Number': '4294967295', 'Reason for Reservation': 'Reserved by [RFC7300]', 'Reference': '[RFC7300]'},
-    ]
+    )
 
 
 def test_asn_whois_docs_1():

@@ -70,17 +70,16 @@ def asns_find(text: str) -> Iterable[str]:
 
 def asns() -> Iterable[Tuple[str, str]]:
     """Get a list of ASNs from http://bgp.potaroo.net/as1221/asnames.txt."""
-    from csv_data import csv_read_string
+    from democritus_csv import csv_read_as_list
     from networking import get
-    from regexes import replace
 
     # TODO: UPDATE THIS TO PULL FROM: http://www.cidr-report.org/as2.0/autnums.html
     url = 'http://bgp.potaroo.net/as1221/asnames.txt'
     asn_data = {}
 
     raw_data = get(url)
-    raw_data = replace('\s(?:\s)+', '\t', raw_data)
-    csv_asn_names = csv_read_string(raw_data, delimiter='\t')
+    raw_data = re.sub('\s(?:\s)+', '\t', raw_data)
+    csv_asn_names = csv_read_as_list(raw_data, delimiter='\t')
 
     for data_point in csv_asn_names:
         asn = asn_standardize(data_point[0])
@@ -116,11 +115,10 @@ def asns_private_numbers() -> Iterable[int]:
 
 def asns_private_ranges() -> List[Dict[str, str]]:
     """Get the reserved (private) ASN ranges from https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml."""
-    from csv_data import csv_to_json
+    from democritus_csv import csv_read_as_dict
 
-    private_asns = csv_to_json(
+    private_asns = csv_read_as_dict(
         'https://www.iana.org/assignments/iana-as-numbers-special-registry/special-purpose-as-numbers.csv',
-        heading_row=0,
     )
     return private_asns
 

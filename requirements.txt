@@ -1,0 +1,1 @@
+git+https://github.com/democritus-project/democritus-csv.git#egg=democritus-csv
