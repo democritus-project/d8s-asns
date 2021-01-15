@@ -129,10 +129,12 @@ def test_asn_whois_docs_1():
 
 
 def test_asns_find_docs_1():
-    from lists import lists_have_same_items
-
     s = 'AS1234 AS 4321 ASN 5678'
-    assert lists_have_same_items(list(asns_find(s)), ['ASN1234', 'ASN4321', 'ASN5678'])
+    asn_list = list(asns_find(s))
+    assert len(asn_list) == 3
+    assert 'ASN1234' in asn_list
+    assert 'ASN4321' in asn_list
+    assert 'ASN5678' in asn_list
 
 
 @pytest.mark.network
