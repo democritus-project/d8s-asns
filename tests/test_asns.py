@@ -3,7 +3,7 @@ import pytest
 from democritus_asns import (
     asn_announced_prefixes,
     asn_adjacent_asns,
-    asn_whois,
+    # asn_whois,
     asns_find,
     asns,
     asn_number,
@@ -31,7 +31,8 @@ def test_asn_announced_prefixes_docs_1():
         '185.213.224.0/22',
         '212.94.64.0/20',
         '212.94.80.0/23',
-        '212.94.88.0/23',
+        '212.94.88.0/24',
+        '212.94.89.0/24',
         '212.94.90.0/23',
         '212.94.92.0/22',
     )
@@ -111,21 +112,21 @@ def test_asns_private_ranges_docs_1():
     )
 
 
-def test_asn_whois_docs_1():
-    results = asn_whois('AS209711')
-    print('results {}'.format(results))
-    assert results.startswith('whois: 399260')
-    assert results.endswith(')')
-    assert '% This query was served by the RIPE Database Query Service version ' in results
-    assert 'IANA has recorded AS209711 as orig' in results
-    assert 'organisation:   ORG-MBVT3-RIPE' in results
+# def test_asn_whois_docs_1():
+#     results = asn_whois('AS209711')
+#     print('results {}'.format(results))
+#     assert results.startswith('whois: 399260')
+#     assert results.endswith(')')
+#     assert '% This query was served by the RIPE Database Query Service version ' in results
+#     assert 'IANA has recorded AS209711 as orig' in results
+#     assert 'organisation:   ORG-MBVT3-RIPE' in results
 
-    results = asn_whois('209711')
-    assert results.startswith('whois: 399260')
-    assert results.endswith(')')
-    assert '% This query was served by the RIPE Database Query Service version ' in results
-    assert 'IANA has recorded AS209711 as orig' in results
-    assert 'organisation:   ORG-MBVT3-RIPE' in results
+#     results = asn_whois('209711')
+#     assert results.startswith('whois: 399260')
+#     assert results.endswith(')')
+#     assert '% This query was served by the RIPE Database Query Service version ' in results
+#     assert 'IANA has recorded AS209711 as orig' in results
+#     assert 'organisation:   ORG-MBVT3-RIPE' in results
 
 
 def test_asns_find_docs_1():

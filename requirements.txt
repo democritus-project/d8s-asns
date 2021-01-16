@@ -1,3 +1,4 @@
 democritus-csv @ git+https://github.com/democritus-project/democritus-csv.git#egg=democritus-csv
+democritus-html @ git+https://github.com/democritus-project/democritus-html.git#egg=democritus-html
 democritus-networking @ git+https://github.com/democritus-project/democritus-networking.git#egg=democritus-networking
 ioc-finder

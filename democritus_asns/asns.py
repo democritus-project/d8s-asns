@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Helpful functions for working with ASNs."""
 
 import os
@@ -18,7 +17,7 @@ def _cidr_report_org_asn_format(as_number: str) -> str:
 def asn_announced_prefixes(as_number: str) -> Iterable[str]:
     """."""
     from democritus_networking import get
-    from html_data import html_to_json
+    from democritus_html import html_to_json
 
     as_number = _cidr_report_org_asn_format(as_number)
 
@@ -36,7 +35,7 @@ def asn_announced_prefixes(as_number: str) -> Iterable[str]:
 def asn_adjacent_asns(as_number: str) -> Iterable[str]:
     """."""
     from democritus_networking import get
-    from html_data import html_to_json
+    from democritus_html import html_to_json
 
     as_number = _cidr_report_org_asn_format(as_number)
 
@@ -50,15 +49,15 @@ def asn_adjacent_asns(as_number: str) -> Iterable[str]:
         yield link['_value']
 
 
-@standardize_asn
-def asn_whois(as_number: str) -> str:
-    from websites import website_get_section_containing
+# @standardize_asn
+# def asn_whois(as_number: str) -> str:
+#     from democritus_html import website_get_section_containing
 
-    as_number = _cidr_report_org_asn_format(as_number)
+#     as_number = _cidr_report_org_asn_format(as_number)
 
-    url = f'https://www.cidr-report.org/cgi-bin/as-report?as={as_number}&view=2.0'
-    whois_data = website_get_section_containing(url, 'whois: 399260')
-    return whois_data
+#     url = f'https://www.cidr-report.org/cgi-bin/as-report?as={as_number}&view=2.0'
+#     whois_data = website_get_section_containing(url, 'whois: 399260')
+#     return whois_data
 
 
 def asns_find(text: str) -> Iterable[str]:
