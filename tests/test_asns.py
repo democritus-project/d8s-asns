@@ -12,6 +12,7 @@ from democritus_asns import (
     asns_private_ranges,
     asn_name,
     asn_standardize,
+    standardize_asn_decorator
 )
 from democritus_asns.asns import _cidr_report_org_asn_format
 
@@ -153,3 +154,15 @@ def test_asns_private_numbers_docs_1():
     l = list(private_numbers)
     assert len(l) == 94968355
     assert isinstance(l[0], int)
+
+
+@standardize_asn_decorator
+def standardize_asn_decorator(a):
+    """."""
+    return a
+
+
+def test_standardize_asn_decorator_1():
+    assert standardize_asn_decorator('123') == 'ASN123'
+    assert standardize_asn_decorator('123') == 'ASN123'
+    assert standardize_asn_decorator(123) == 'ASN123'

@@ -1,19 +1,43 @@
 """Helpful functions for working with ASNs."""
 
-import os
+import functools
 import re
-import sys
 from typing import Iterable, Tuple, List, Dict, Optional
 
-from .asns_temp_utils import standardize_asn, stringify_first_arg
+from .asns_temp_utils import stringify_first_arg, enumerate_human_readable_range
 
+
+@stringify_first_arg
+def asn_standardize(as_number: str) -> Optional[str]:
+    """Standardize the ASN format."""
+    numbers = re.findall('[0-9]{1,10}', as_number)
+    if numbers:
+        return 'ASN{}'.format(numbers[0])
+    else:
+        message = f'The given data ({as_number}) cannot be formatted as an ASN.'
+        print(message)
+        return None
+
+
+def standardize_asn_decorator(func):
+    """Standardize the first argument as an ASN."""
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        first_arg = args[0]
+        other_args = args[1:]
+
+        standardized_first_arg = asn_standardize(first_arg)
+        return func(standardized_first_arg, *other_args, **kwargs)
+
+    return wrapper
 
 def _cidr_report_org_asn_format(as_number: str) -> str:
     """Return the as_number in the format required by cidr-report.org (e.g. "AS1234")."""
     return as_number.replace('N', '')
 
 
-@standardize_asn
+@standardize_asn_decorator
 def asn_announced_prefixes(as_number: str) -> Iterable[str]:
     """."""
     from democritus_networking import get
@@ -31,7 +55,7 @@ def asn_announced_prefixes(as_number: str) -> Iterable[str]:
         yield prefix['_value']
 
 
-@standardize_asn
+@standardize_asn_decorator
 def asn_adjacent_asns(as_number: str) -> Iterable[str]:
     """."""
     from democritus_networking import get
@@ -49,7 +73,7 @@ def asn_adjacent_asns(as_number: str) -> Iterable[str]:
         yield link['_value']
 
 
-# @standardize_asn
+# @standardize_asn_decorator
 # def asn_whois(as_number: str) -> str:
 #     from democritus_html import website_get_section_containing
 
@@ -86,7 +110,7 @@ def asns() -> Iterable[Tuple[str, str]]:
         yield asn, asn_name
 
 
-@standardize_asn
+@standardize_asn_decorator
 def asn_number(as_number: str) -> int:
     """Get the number value of the given ASN."""
     return int(as_number.lstrip('ASN'))
@@ -126,22 +150,10 @@ def asns_private_ranges() -> List[Dict[str, str]]:
     return private_asns
 
 
-@standardize_asn
+@standardize_asn_decorator
 def asn_name(as_number: str) -> Optional[str]:
     """Get the name of the given asn."""
     all_asns = asns()
     for asn, name in all_asns:
         if asn == as_number:
             return name
-
-
-@stringify_first_arg
-def asn_standardize(as_number: str) -> Optional[str]:
-    """Standardize the ASN format."""
-    numbers = re.findall('[0-9]{1,10}', as_number)
-    if numbers:
-        return 'ASN{}'.format(numbers[0])
-    else:
-        message = f'The given data ({as_number}) cannot be formatted as an ASN.'
-        print(message)
-        return None
