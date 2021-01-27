@@ -12,7 +12,7 @@ from democritus_asns import (
     asns_private_ranges,
     asn_name,
     asn_standardize,
-    standardize_asn_decorator
+    standardize_asn_decorator,
 )
 from democritus_asns.asns import _cidr_report_org_asn_format
 

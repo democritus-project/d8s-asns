@@ -32,6 +32,7 @@ def standardize_asn_decorator(func):
 
     return wrapper
 
+
 def _cidr_report_org_asn_format(as_number: str) -> str:
     """Return the as_number in the format required by cidr-report.org (e.g. "AS1234")."""
     return as_number.replace('N', '')
