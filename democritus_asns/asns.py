@@ -99,7 +99,6 @@ def asns() -> Iterable[Tuple[str, str]]:
 
     # TODO: UPDATE THIS TO PULL FROM: http://www.cidr-report.org/as2.0/autnums.html
     url = 'http://bgp.potaroo.net/as1221/asnames.txt'
-    asn_data = {}
 
     raw_data = get(url, process_response=True)
     raw_data = re.sub('\s(?:\s)+', '\t', raw_data)
@@ -154,7 +153,11 @@ def asns_private_ranges() -> List[Dict[str, str]]:
 @standardize_asn_decorator
 def asn_name(as_number: str) -> Optional[str]:
     """Get the name of the given asn."""
+    matching_name: Optional[str] = None
     all_asns = asns()
+
     for asn, name in all_asns:
         if asn == as_number:
-            return name
+            matching_name = name
+
+    return matching_name
