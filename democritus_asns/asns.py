@@ -2,9 +2,9 @@
 
 import functools
 import re
-from typing import Iterable, Tuple, List, Dict, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
-from .asns_temp_utils import stringify_first_arg, enumerate_human_readable_range
+from .asns_temp_utils import enumerate_human_readable_range, stringify_first_arg
 
 
 @stringify_first_arg
@@ -41,8 +41,8 @@ def _cidr_report_org_asn_format(as_number: str) -> str:
 @standardize_asn_decorator
 def asn_announced_prefixes(as_number: str) -> Iterable[str]:
     """."""
-    from democritus_networking import get
     from democritus_html import html_to_json
+    from democritus_networking import get
 
     as_number = _cidr_report_org_asn_format(as_number)
 
@@ -59,8 +59,8 @@ def asn_announced_prefixes(as_number: str) -> Iterable[str]:
 @standardize_asn_decorator
 def asn_adjacent_asns(as_number: str) -> Iterable[str]:
     """."""
-    from democritus_networking import get
     from democritus_html import html_to_json
+    from democritus_networking import get
 
     as_number = _cidr_report_org_asn_format(as_number)
 
