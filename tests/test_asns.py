@@ -39,18 +39,20 @@ def test_asn_announced_prefixes_docs_1():
 
 
 def test_asn_is_private_docs_1():
-    assert asn_is_private('0') == True
-    assert asn_is_private('23456') == True
-    assert asn_is_private(23456) == True
-    assert asn_is_private('64496') == True
-    assert asn_is_private('64500') == True
-    assert asn_is_private('64511') == True
-    assert asn_is_private('4294967295') == True
-    assert asn_is_private('64496') == True
-    assert asn_is_private('ASN64496') == True
-    assert asn_is_private('ASN 64496') == True
-    assert asn_is_private('AS64496') == True
-    assert asn_is_private('AS 64496') == True
+    assert asn_is_private('0')
+    assert asn_is_private('23456')
+    assert asn_is_private(23456)
+    assert asn_is_private('64496')
+    assert asn_is_private('64500')
+    assert asn_is_private('64511')
+    assert asn_is_private('4294967295')
+    assert asn_is_private('64496')
+    assert asn_is_private('ASN64496')
+    assert asn_is_private('ASN 64496')
+    assert asn_is_private('AS64496')
+    assert asn_is_private('AS 64496')
+
+    assert not asn_is_private('AS 1234')
 
 
 def test_asn_name_docs_1():
@@ -75,7 +77,7 @@ def test_asn_standardize_docs_1():
     assert asn_standardize('ASN 1234') == 'ASN1234'
     assert asn_standardize('1234') == 'ASN1234'
     assert asn_standardize(1234) == 'ASN1234'
-    assert asn_standardize('foo') == None
+    assert asn_standardize('foo') is None
 
 
 def test_asns_private_ranges_docs_1():
@@ -141,18 +143,18 @@ def test_asns_find_docs_1():
 @pytest.mark.network
 def test_asns_docs_1():
     data = asns()
-    l = list(data)
-    assert len(l) >= 62934
-    assert isinstance(l[0], tuple)
-    assert isinstance(l[0][0], str)
+    data_list = list(data)
+    assert len(data_list) >= 62934
+    assert isinstance(data_list[0], tuple)
+    assert isinstance(data_list[0][0], str)
 
 
 @pytest.mark.network
 def test_asns_private_numbers_docs_1():
     private_numbers = asns_private_numbers()
-    l = list(private_numbers)
-    assert len(l) == 94968355
-    assert isinstance(l[0], int)
+    data_list = list(private_numbers)
+    assert len(data_list) == 94968355
+    assert isinstance(data_list[0], int)
 
 
 @standardize_asn_decorator
