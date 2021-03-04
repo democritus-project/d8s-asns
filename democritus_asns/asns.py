@@ -2,9 +2,13 @@
 
 import functools
 import re
-from typing import Iterable, Tuple, List, Dict, Optional
+from typing import Dict, Iterable, List, Optional, Tuple
 
-from .asns_temp_utils import stringify_first_arg, enumerate_human_readable_range
+from democritus_csv import csv_read_as_dict, csv_read_as_list
+from democritus_html import html_to_json
+from democritus_networking import get
+
+from .asns_temp_utils import enumerate_human_readable_range, stringify_first_arg
 
 
 @stringify_first_arg
@@ -41,16 +45,14 @@ def _cidr_report_org_asn_format(as_number: str) -> str:
 @standardize_asn_decorator
 def asn_announced_prefixes(as_number: str) -> Iterable[str]:
     """."""
-    from democritus_networking import get
-    from democritus_html import html_to_json
-
     as_number = _cidr_report_org_asn_format(as_number)
 
     url = f'https://www.cidr-report.org/cgi-bin/as-report/as-report?as={as_number}&view=2.0&v=4&filter=pass'
     html_repsponse = get(url, process_response=True)
     d = html_to_json(html_repsponse)
     prefix_data = d['html'][0]['body'][0]['pre'][0]['a']
-    # the prefix_data variable looks like: [{'_attributes': {'href': 'https://62.220.244.0.22.potaroo.net', 'class': ['black']}, '_value': '62.220.244.0/22'}, ...]
+    # the prefix_data variable looks like:
+    # [{'_attributes': {'href': 'https://62.220.244.0.22.potaroo.net', 'class': ['black']}, '_value': '62.220.244.0/22'}, ...]  # noqa: E501
 
     for prefix in prefix_data:
         yield prefix['_value']
@@ -59,16 +61,14 @@ def asn_announced_prefixes(as_number: str) -> Iterable[str]:
 @standardize_asn_decorator
 def asn_adjacent_asns(as_number: str) -> Iterable[str]:
     """."""
-    from democritus_networking import get
-    from democritus_html import html_to_json
-
     as_number = _cidr_report_org_asn_format(as_number)
 
     url = f'https://www.cidr-report.org/cgi-bin/as-report?as={as_number}&view=2.0'
     html_repsponse = get(url, process_response=True)
     d = html_to_json(html_repsponse)
     adjacency_report = d['html'][0]['body'][0]['p'][1]['p'][0]['ul'][0]['p'][0]['pre'][0]
-    # the adjacency_report variable looks like: {'a': [{'_attributes': {'href': '/cgi-bin/as-report?as=AS6702&v=4&view=2.0'}, '_value': 'AS6702'}, {'_attributes': {'href': '/cgi-bin/as-report?as=AS3326&v=4&view=2.0'}, '_value': 'AS3326'}, {'_attributes': {'href': '/cgi-bin/as-report?as=AS1&v=4&view=2.0'}, '_value': 'AS1'}], '_values': ['48085 IDATACENTER, CZ\n\n  Adjacency:     3  Upstream:     2  Downstream:     1\n  Upstream Adjacent AS list', 'APEXNCC-AS Gagarina avenue, building 7, room 61, RU', 'DATAGROUP "Datagroup" PJSC, UA\n  Downstream Adjacent AS list', 'LVLT-1, US']}
+    # the adjacency_report variable looks like:
+    # {'a': [{'_attributes': {'href': '/cgi-bin/as-report?as=AS6702&v=4&view=2.0'}, '_value': 'AS6702'}, {'_attributes': {'href': '/cgi-bin/as-report?as=AS3326&v=4&view=2.0'}, '_value': 'AS3326'}, {'_attributes': {'href': '/cgi-bin/as-report?as=AS1&v=4&view=2.0'}, '_value': 'AS1'}], '_values': ['48085 IDATACENTER, CZ\n\n  Adjacency:     3  Upstream:     2  Downstream:     1\n  Upstream Adjacent AS list', 'APEXNCC-AS Gagarina avenue, building 7, room 61, RU', 'DATAGROUP "Datagroup" PJSC, UA\n  Downstream Adjacent AS list', 'LVLT-1, US']}  # noqa: E501
 
     for link in adjacency_report['a']:
         yield link['_value']
@@ -94,21 +94,16 @@ def asns_find(text: str) -> Iterable[str]:
 
 def asns() -> Iterable[Tuple[str, str]]:
     """Get a list of ASNs from http://bgp.potaroo.net/as1221/asnames.txt."""
-    from democritus_csv import csv_read_as_list
-    from democritus_networking import get
-
-    # TODO: UPDATE THIS TO PULL FROM: http://www.cidr-report.org/as2.0/autnums.html
     url = 'http://bgp.potaroo.net/as1221/asnames.txt'
-    asn_data = {}
 
     raw_data = get(url, process_response=True)
-    raw_data = re.sub('\s(?:\s)+', '\t', raw_data)
+    raw_data = re.sub(r'\s(?:\s)+', '\t', raw_data)
     csv_asn_names = csv_read_as_list(raw_data, delimiter='\t')
 
     for data_point in csv_asn_names:
         asn = asn_standardize(data_point[0])
-        asn_name = data_point[1]
-        yield asn, asn_name
+        asn_temp_name = data_point[1]
+        yield asn, asn_temp_name
 
 
 @standardize_asn_decorator
@@ -124,9 +119,15 @@ def asn_is_private(as_number: str) -> bool:
 
 
 def asns_private_numbers() -> Iterable[int]:
-    """Get the reserved (private) ASN numbers from https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml. This function only returns the private ASN numbers. The `asnsPrivate` function returns more information about the private ASN ranges."""
-    from .asns_temp_utils import enumerate_human_readable_range
+    """Return the reserved (private) ASN numbers.
 
+    Data is collected from:
+
+    https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml
+
+    This function only returns the private ASN numbers.
+    The `asns_private_ranges` function returns more information about the private ASN ranges.
+    """
     private_asn_data = asns_private_ranges()
 
     for private_asn_entry in private_asn_data:
@@ -138,10 +139,12 @@ def asns_private_numbers() -> Iterable[int]:
 
 
 def asns_private_ranges() -> List[Dict[str, str]]:
-    """Get the reserved (private) ASN ranges from https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml."""
-    from democritus_csv import csv_read_as_dict
-    from democritus_networking import get
+    """Return the reserved (private) ASN ranges.
 
+    Data is collected from:
+
+    https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml
+    """
     private_asns = csv_read_as_dict(
         get(
             'https://www.iana.org/assignments/iana-as-numbers-special-registry/special-purpose-as-numbers.csv',
@@ -154,7 +157,11 @@ def asns_private_ranges() -> List[Dict[str, str]]:
 @standardize_asn_decorator
 def asn_name(as_number: str) -> Optional[str]:
     """Get the name of the given asn."""
+    matching_name: Optional[str] = None
     all_asns = asns()
+
     for asn, name in all_asns:
         if asn == as_number:
-            return name
+            matching_name = name
+
+    return matching_name
