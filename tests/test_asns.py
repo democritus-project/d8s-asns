@@ -1,7 +1,7 @@
 import pytest
 
-from democritus_asns import asn_name  # asn_whois,
-from democritus_asns import (
+from d8s_asns import asn_name  # asn_whois,
+from d8s_asns import (
     asn_adjacent_asns,
     asn_announced_prefixes,
     asn_is_private,
@@ -13,7 +13,7 @@ from democritus_asns import (
     asns_private_ranges,
     standardize_asn_decorator,
 )
-from democritus_asns.asns import _cidr_report_org_asn_format
+from d8s_asns.asns import _cidr_report_org_asn_format
 
 
 def test__cidr_report_org_asn_format_docs_1():
