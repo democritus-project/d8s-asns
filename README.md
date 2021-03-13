@@ -1,8 +1,8 @@
 # Democritus Asns
 
-[![PyPI](https://img.shields.io/pypi/v/democritus-asns.svg)](https://pypi.python.org/pypi/democritus-asns)
-[![Build Status](https://travis-ci.com/democritus-project/democritus-asns.svg?branch=main)](https://travis-ci.com/democritus-project/democritus-asns)
-[![codecov](https://codecov.io/gh/democritus-project/democritus-asns/branch/main/graph/badge.svg?token=V0WOIXRGMM)](https://codecov.io/gh/democritus-project/democritus-asns)
+[![PyPI](https://img.shields.io/pypi/v/d8s-asns.svg)](https://pypi.python.org/pypi/d8s-asns)
+[![Build Status](https://travis-ci.com/democritus-project/d8s-asns.svg?branch=main)](https://travis-ci.com/democritus-project/d8s-asns)
+[![codecov](https://codecov.io/gh/democritus-project/d8s-asns/branch/main/graph/badge.svg?token=V0WOIXRGMM)](https://codecov.io/gh/democritus-project/d8s-asns)
 
 Democritus functions<sup>[1]</sup> for working with asns.
 

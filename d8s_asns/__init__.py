@@ -6,13 +6,13 @@ except ImportError:
 from .asns import *
 
 try:
-    __version__ = version('democritus_asns')
+    __version__ = version('d8s_asns')
 except PackageNotFoundError:
     message = (
-        'Unable to find a version number for "democritus_asns". '
+        'Unable to find a version number for "d8s_asns". '
         + 'This likely means the library was not installed properly. '
         + 'Please re-install it and, if the problem persists, '
-        + 'raise an issue here: https://github.com/democritus-project/democritus-asns/issues.'
+        + 'raise an issue here: https://github.com/democritus-project/d8s-asns/issues.'
     )
     print(message)
 
