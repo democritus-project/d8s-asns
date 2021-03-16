@@ -1,5 +1,5 @@
-democritus-csv
-democritus-html
-democritus-networking
+d8s-csv
+d8s-html
+d8s-networking
 importlib-metadata; python_version < '3.8'
 ioc-finder

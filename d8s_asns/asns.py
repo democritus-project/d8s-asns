@@ -4,9 +4,9 @@ import functools
 import re
 from typing import Dict, Iterable, List, Optional, Tuple
 
-from democritus_csv import csv_read_as_dict, csv_read_as_list
-from democritus_html import html_to_json
-from democritus_networking import get
+from d8s_csv import csv_read_as_dict, csv_read_as_list
+from d8s_html import html_to_json
+from d8s_networking import get
 
 from .asns_temp_utils import enumerate_human_readable_range, stringify_first_arg
 
@@ -76,7 +76,7 @@ def asn_adjacent_asns(as_number: str) -> Iterable[str]:
 
 # @standardize_asn_decorator
 # def asn_whois(as_number: str) -> str:
-#     from democritus_html import website_get_section_containing
+#     from d8s_html import website_get_section_containing
 
 #     as_number = _cidr_report_org_asn_format(as_number)
 
