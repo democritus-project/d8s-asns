@@ -14,9 +14,63 @@ Democritus functions<sup>[1]</sup> for working with asns.
 
 We use `d8s` as an abbreviation for `democritus` (you can read more about this [here](https://github.com/democritus-project/roadmap#what-is-d8s)).
 
-## Usage
+## Functions
 
-Coming soon...
+  - ```python
+    def asn_standardize(as_number: str) -> Optional[str]:
+        """Standardize the ASN format."""
+    ```
+  - ```python
+    def standardize_asn_decorator(func):
+        """Standardize the first argument as an ASN."""
+    ```
+  - ```python
+    def asn_announced_prefixes(as_number: str) -> Iterable[str]:
+        """."""
+    ```
+  - ```python
+    def asn_adjacent_asns(as_number: str) -> Iterable[str]:
+        """."""
+    ```
+  - ```python
+    def asns_find(text: str) -> Iterable[str]:
+        """Parse ASNs from the given text."""
+    ```
+  - ```python
+    def asns() -> Iterable[Tuple[str, str]]:
+        """Get a list of ASNs from http://bgp.potaroo.net/as1221/asnames.txt."""
+    ```
+  - ```python
+    def asn_number(as_number: str) -> int:
+        """Get the number value of the given ASN."""
+    ```
+  - ```python
+    def asn_is_private(as_number: str) -> bool:
+        """Check if the given ASN is private."""
+    ```
+  - ```python
+    def asns_private_numbers() -> Iterable[int]:
+        """Return the reserved (private) ASN numbers.
+    
+    Data is collected from:
+    
+    https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml
+    
+    This function only returns the private ASN numbers.
+    The `asns_private_ranges` function returns more information about the private ASN ranges."""
+    ```
+  - ```python
+    def asns_private_ranges() -> List[Dict[str, str]]:
+        """Return the reserved (private) ASN ranges.
+    
+    Data is collected from:
+    
+    https://www.iana.org/assignments/iana-as-numbers-special-registry/iana-as-numbers-special-registry.xhtml"""
+    ```
+  - ```python
+    def asn_name(as_number: str) -> Optional[str]:
+        """Get the name of the given asn."""
+    ```
 
 ## Development
 
